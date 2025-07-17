@@ -231,7 +231,7 @@ export default function PreprocessingPage() {
         formData.append("testPercentage", testPercentage.toString());
       
         try {
-          const response = await fetch("http://localhost:8000/api/split-dataset", {
+          const response = await fetch(`${baseURL}/api/split-dataset`, {
             method: "POST",
             body: formData,
           });
