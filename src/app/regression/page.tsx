@@ -11,6 +11,7 @@ import type { ParseResult } from "papaparse";
 
 
 export default function RegressionPage() {
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
     const models = [
     { 
@@ -134,7 +135,7 @@ export default function RegressionPage() {
         };
       
         try {
-          const response = await fetch("http://localhost:8000/train", {
+          const response = await fetch(`${baseURL}/train`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"

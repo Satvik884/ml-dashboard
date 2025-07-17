@@ -8,6 +8,7 @@ import ShowDataset from "../components/ShowDataset";
 import { useRouter } from "next/navigation";
 
 export default function PreprocessingPage() {
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
     type ColumnStats = {
         [statName: string]: number | string; 
@@ -60,7 +61,7 @@ export default function PreprocessingPage() {
             const formData = new FormData();
             formData.append("file", datasetFile);
 
-            const response = await axios.post("http://127.0.0.1:8000/api/dataset/process-dataset", formData, {
+            const response = await axios.post(`${baseURL}/api/dataset/process-dataset`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
@@ -84,7 +85,7 @@ export default function PreprocessingPage() {
             const formData = new FormData();
             formData.append("file", datasetFile);
     
-            const response = await axios.post("http://127.0.0.1:8000/api/missing-values/check", formData, {
+            const response = await axios.post(`${baseURL}/api/missing-values/check`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
     
@@ -121,7 +122,7 @@ export default function PreprocessingPage() {
             formData.append("file", datasetFile);
             formData.append("targetVariable", targetVariable);
 
-            const response = await axios.post("http://127.0.0.1:8000/api/missing-values/handle", formData, {
+            const response = await axios.post(`${baseURL}/api/missing-values/handle`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
@@ -161,7 +162,7 @@ export default function PreprocessingPage() {
             const formData = new FormData();
             formData.append("file", datasetFile);
 
-            const response = await axios.post("http://127.0.0.1:8000/api/encoding/one-hot", formData, {
+            const response = await axios.post(`${baseURL}/api/encoding/one-hot`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
     
@@ -194,7 +195,7 @@ export default function PreprocessingPage() {
             formData.append("file", datasetFile);
             formData.append("method", scalingMethod); // "standard" or "minmax"
     
-            const response = await axios.post("http://127.0.0.1:8000/api/scaling", formData, {
+            const response = await axios.post(`${baseURL}/api/scaling`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
     
