@@ -24,3 +24,26 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hide the scrollbar track */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px; /* Width of the scrollbar */
+}
+
+/* Change the thumb (scroll indicator) */
+::-webkit-scrollbar-thumb {
+  background: #3d4a5c; /* Dark gray/blue color */
+  border-radius: 10px; /* Rounded edges */
+}
+
+/* Change the scrollbar track when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background: #525f73; /* Slightly lighter gray/blue */
+}
+
+/* Optional: Change the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #0e1621; /* Dark navy background */
+  border-radius: 10px;
+}
