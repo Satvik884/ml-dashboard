@@ -87,7 +87,7 @@ export default function ClassificationPage() {
         const model = searchParams.get('model');
         if (model) {
             setSelectedModel(model);
-            console.log("Model selected from URL:", model);
+            //console("Model selected from URL:", model);
         }
         }, [searchParams]);
 
@@ -148,7 +148,7 @@ export default function ClassificationPage() {
           });
       
           const result = await response.json();
-          console.log("Result:",result)
+          //console("Result:",result)
           setTrainingResults(prev => ({
             ...prev,
             [selectedModel]: result
@@ -245,7 +245,7 @@ export default function ClassificationPage() {
                     <p className="mt-2 text-sm leading-relaxed">
                         Before training a machine learning model, raw data needs to be cleaned and transformed 
                         into a suitable format. Data preprocessing ensures that your dataset is structured, 
-                        free of inconsistencies, and ready for analysis. Key steps include:
+                        free of inconsistencies, and ready for analysis.
                     </p>     
 
                     <p className="mt-4 text-sm">

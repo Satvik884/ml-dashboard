@@ -20,6 +20,8 @@ export default function Prep_class() {
     };
     const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
+
+    const [loading, setLoading] = useState(false);
     const { dataset, setDataset, datasetFile , setDatasetFile} = useDataset();
     const [columns, setColumns] = useState<string[]>([]);
     const [allColumns,setAllColumns] = useState<string[]>([]);
@@ -52,7 +54,7 @@ export default function Prep_class() {
             console.error("No dataset file found!");
             return;
         }
-    
+        setLoading(true);
         try {
             const formData = new FormData();
             formData.append("file", datasetFile);
@@ -69,6 +71,8 @@ export default function Prep_class() {
             setAllColumns(response.data.all_columns || []); 
         } catch  {
             console.error("Error processing dataset:");
+        } finally{
+            setLoading(false);
         }
     };
 
@@ -322,6 +326,11 @@ export default function Prep_class() {
                             >
                             Load Dataset Statistics
                         </button>
+                        {loading && (
+                            <div className="mt-3 text-yellow-400 text-sm">
+                                Waking up backend, please wait...
+                            </div>
+                        )}
                         {columns.length>1 && (
                         <div className="mt-4 max-h-80 overflow-auto border border-gray-600 rounded-md p-2">                        
                         <table className="w-full border-collapse text-sm text-white">

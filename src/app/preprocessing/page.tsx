@@ -22,7 +22,7 @@ export default function PreprocessingPage() {
         [column: string]: number;
     };
       
-      
+    const [loading, setLoading] = useState(false);
     const { dataset, setDataset, datasetFile , setDatasetFile} = useDataset();
     const [columns, setColumns] = useState<string[]>([]);
     const [allColumns,setAllColumns] = useState<string[]>([]);
@@ -57,7 +57,7 @@ export default function PreprocessingPage() {
             console.error("No dataset file found!");
             return;
         }
-    
+        setLoading(true);
         try {
             const formData = new FormData();
             formData.append("file", datasetFile);
@@ -74,6 +74,8 @@ export default function PreprocessingPage() {
             setAllColumns(response.data.all_columns || []); 
         } catch  {
             console.error("Error processing dataset:");
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -369,6 +371,11 @@ export default function PreprocessingPage() {
                             >
                             Load Dataset Statistics
                         </button>
+                        {loading && (
+                            <div className="mt-3 text-yellow-400 text-sm">
+                                Waking up backend, please wait...
+                            </div>
+                        )}
                         {columns.length>1 && (
                         <div className="mt-4 max-h-80 overflow-auto border border-gray-600 rounded-md p-2">                        
                         <table className="w-full border-collapse text-sm text-white">

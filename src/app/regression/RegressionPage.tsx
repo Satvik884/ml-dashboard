@@ -256,7 +256,7 @@ export default function RegressionPage() {
                     <p className="mt-2 text-sm leading-relaxed">
                         Before training a machine learning model, raw data needs to be cleaned and transformed 
                         into a suitable format. Data preprocessing ensures that your dataset is structured, 
-                        free of inconsistencies, and ready for analysis. Key steps include:
+                        free of inconsistencies, and ready for analysis.
                     </p>     
 
                     <p className="mt-4 text-sm">
