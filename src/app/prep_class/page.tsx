@@ -297,7 +297,6 @@ export default function Prep_class() {
                         <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Handle missing values">Handle missing values</a></li>
                         <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Categorical Encoding">Categorical Encoding</a></li>
                         <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Feature Scaling">Feature Scaling</a></li>
-                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Label Encoding">Label Encoding</a></li>
                         <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Data Splitting">Data Splitting</a></li>
                     </ul>
                 </aside>
@@ -311,6 +310,10 @@ export default function Prep_class() {
                 
                     <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="DatasetStatistics">
                         <h2 className="text-xl font-bold">Dataset Statistics</h2>
+                        <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                            The dataset statistics offer a quick overview of each column&apos;s distribution, helping you spot anomalies, missing values, or patterns. This summary is useful for early-stage data analysis and model preparation. Re-click “Load Dataset Statistics” if the dataset is updated or changed.
+                        </p>
+
                         <button
                             className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 cursor-pointer"
                             onClick={() => {
@@ -350,6 +353,10 @@ export default function Prep_class() {
                     </div>
                     <div className="mt-6 p-6 bg-gray-800 rounded-lg">
                         <h2 className="text-xl font-bold">Select Target Variable</h2>
+                        <p className="mt-2 text-sm text-gray-300">
+                            Choose the target variable that you want your model to predict. This is typically the column containing labels or outcomes in your dataset. Make sure to select the correct target before proceeding to model training or evaluation.
+                        </p>
+
                         <select
                             className="mt-2 p-2 rounded-lg bg-gray-700 text-white"
                             value={targetVariable}
@@ -366,6 +373,10 @@ export default function Prep_class() {
 
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Handle missing values">
                     <h2 className="text-xl font-bold">Handle missing values</h2>
+                    <p className="mt-4 text-sm text-gray-300">
+                        This section checks for missing values in your dataset and displays the affected columns along with their counts. Identifying and handling these gaps is crucial for building reliable models, as missing data can skew results or cause errors. Click “Handle Missing Values” to automatically address them using predefined strategies.
+                    </p>
+
                     <button
                     className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 cursor-pointer"
                     onClick={() => {
@@ -408,7 +419,7 @@ export default function Prep_class() {
                             <div className="mt-4 flex space-x-4">
                                 
                             <button
-                                className={`mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg`}
+                                className={`mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg transition-transform duration-300 hover:scale-105 cursor-pointer`}
                                 onClick={() => {
                                     handleMissingValues();
                                 }}
@@ -433,7 +444,7 @@ export default function Prep_class() {
                                 ))}
                             </ul>
                             <button
-                                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold"
+                                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold cursor-pointer"
                                 onClick={() => setShowChanges(false)}
                             >
                                 Close
@@ -442,18 +453,26 @@ export default function Prep_class() {
                     </div>
                 )}
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Categorical Encoding">
-                    <h2 className="text-xl font-bold mb-2">Categorical Encoding</h2>                  
+                    <h2 className="text-xl font-bold mb-2">Categorical Encoding</h2>     
+                    <p className="mt-4 text-sm text-gray-300">
+                        Categorical encoding transforms non-numeric columns into a numerical format suitable for machine learning algorithms. This step ensures that categorical variables are properly interpreted by models. Click “Proceed with Encoding” to apply encoding techniques automatically.
+                    </p>
+                                
                     <button
                         className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                         onClick={() => handleEncoding()}
                     >
-                        Proceed with One-hot encoding
+                        Proceed with Encoding
                     </button>
                     {processedDataset2 && datasetEncoded && <ShowDataset dataset={datasetEncoded}  />}
                 
                 </div>
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Feature Scaling">
                     <h2 className="text-xl font-bold mb-2">Feature Scaling</h2>
+                    <p className="mt-4 text-sm text-gray-300">
+                        Feature scaling standardizes the range of numeric features, which helps models converge faster and improves accuracy, especially for algorithms sensitive to magnitude. Apply scaling here to ensure uniform feature contribution.
+                    </p>
+
 
                     <div className="flex flex-col">
                         <div>
@@ -485,6 +504,9 @@ export default function Prep_class() {
                 </div>
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Data Splitting">
                     <h2 className="text-xl font-bold mb-2">Data Splitting</h2>
+                    <p className="mt-4 text-sm text-gray-300">
+                        Data splitting divides your dataset into training and testing subsets, allowing you to evaluate your model’s performance on unseen data. This step is essential for preventing overfitting and ensuring generalization. Customize your split ratio to balance learning and validation effectively.
+                    </p>
 
                     <div className="flex flex-col space-y-2">
                         <div>

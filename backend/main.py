@@ -1,5 +1,5 @@
 # main.py
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 from process_Dataset import process_dataset_file
@@ -11,6 +11,11 @@ from pydantic import BaseModel
 from typing import List, Any
 from train_model import train_and_evaluate
 from train_classification import train_and_evaluate_classifier
+from pydantic import BaseModel
+import joblib
+import os
+from typing import List
+
 app = FastAPI()
 
 app.add_middleware(
@@ -159,3 +164,4 @@ def train_classifier_endpoint(req: ClassificationTrainRequest):
             "metrics": {},
             "model_info": {}
         }
+    

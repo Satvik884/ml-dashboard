@@ -1,8 +1,8 @@
 "use client"
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {Upload, Sliders, BrainCircuit, TreeDeciduous, Rocket } from "lucide-react"; 
 import {FunctionSquare, Trees,MoveDiagonal, Users, TrendingUp} from "lucide-react"; 
-import { useRouter } from "next/navigation";
+import { useRouter ,useSearchParams} from "next/navigation";
 import { useDataset } from "../context/DatasetContext"; 
 import Header from "../components/header";
 import Papa from "papaparse";
@@ -10,6 +10,7 @@ import type { ParseResult } from "papaparse";
 
 
 export default function ClassificationPage() {
+    const searchParams = useSearchParams();
     const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
     const models = [
@@ -80,6 +81,14 @@ export default function ClassificationPage() {
     const { dataset, setDataset, datasetFile, setDatasetFile } = useDataset();
     const [trainingResults, setTrainingResults] = useState<Record<string, ClassificationTrainingResult>>({});
     const result = trainingResults[selectedModel];
+
+    useEffect(() => {
+        const model = searchParams.get('model');
+        if (model) {
+            setSelectedModel(model);
+            console.log("Model selected from URL:", model);
+        }
+        }, [searchParams]);
 
     
     const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -276,15 +285,53 @@ export default function ClassificationPage() {
                 </div>
 
                 {result && (
-                    
-                    <div className="mt-6 p-6 rounded-lg text-gray-300 bg-gray-800 ">
-                        <h2 className="text-xl font-bold text-white">Results</h2>
-                        <p>{result.message}</p>
-                        <p>Accuracy: {result.metrics.accuracy}</p>
-                        <p>Precision: {result.metrics.precision}</p>
-                        <p>F1_score: {result.metrics.f1_score}</p>
-                        <p>Recall:{result.metrics.recall}</p>                        
-                        <p>Confusion Matrix:{result.metrics.confusion_matrix}</p>                        
+                    <div className="mt-6 p-6 rounded-2xl bg-gray-900 text-gray-300 shadow-xl ring-1 ring-gray-700">
+                        <h2 className="text-2xl font-bold text-white mb-4">Model Evaluation Results</h2>
+
+                        <p className="mb-2 text-lg text-indigo-300">{result.message}</p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-sm md:text-base">
+                        <div className="bg-gray-800 rounded-lg p-4">
+                            <h3 className="text-white font-semibold"> Accuracy</h3>
+                            <p>{result.metrics.accuracy}</p>
+                        </div>
+                        <div className="bg-gray-800 rounded-lg p-4">
+                            <h3 className="text-white font-semibold">Precision</h3>
+                            <p>{result.metrics.precision}</p>
+                        </div>
+                        <div className="bg-gray-800 rounded-lg p-4">
+                            <h3 className="text-white font-semibold">F1 Score</h3>
+                            <p>{result.metrics.f1_score}</p>
+                        </div>
+                        <div className="bg-gray-800 rounded-lg p-4">
+                            <h3 className="text-white font-semibold"> Recall</h3>
+                            <p>{result.metrics.recall}</p>
+                        </div>
+                        </div>
+
+                        {result.metrics.confusion_matrix && (
+                            <div className="mt-8">
+                                <h3 className="text-lg font-semibold text-indigo-300 mb-3"> Confusion Matrix</h3>
+                                <div className="overflow-x-auto">
+                                <table className="table-auto border-collapse border border-gray-600 w-full">
+                                    <tbody>
+                                    {result.metrics.confusion_matrix.map((row, rowIndex) => (
+                                        <tr key={rowIndex}>
+                                        {row.map((cell, colIndex) => (
+                                            <td
+                                            key={colIndex}
+                                            className="border border-gray-200 px-4 py-2 text-center text-white"
+                                            >
+                                            {cell}
+                                            </td>
+                                        ))}
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            )}
                     </div>
                     )}
 

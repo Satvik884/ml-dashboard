@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Upload, Sliders, BrainCircuit, TreeDeciduous, Rocket } from "lucide-react"; 
 import {FunctionSquare, Trees,MoveDiagonal, Crop, Users, TrendingUp} from "lucide-react"; 
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 import { useDataset } from "../context/DatasetContext"; 
 import Header from "../components/header";
 import Papa from "papaparse";
@@ -11,6 +11,7 @@ import type { ParseResult } from "papaparse";
 
 
 export default function RegressionPage() {
+    const searchParams = useSearchParams();
     const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const router = useRouter();
     const models = [
@@ -87,6 +88,17 @@ export default function RegressionPage() {
     const [trainingResults, setTrainingResults] = useState<Record<string, TrainingResult>>({});
     const result = trainingResults[selectedModel];
 
+    
+      
+    useEffect(() => {
+    const model = searchParams.get('model');
+    if (model) {
+        setSelectedModel(model);
+        console.log("Model selected from URL:", model);
+    }
+    }, [searchParams]);
+
+      
 
     const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -126,13 +138,16 @@ export default function RegressionPage() {
         }
       
         const payload = {
-          model_name: selectedModel,
-          X_train,
-          y_train,
-          X_test,
-          y_test,
-          session_id: "user-session-id-001"
-        };
+            model_name: selectedModel,
+            X_train,
+            y_train,
+            X_test,
+            y_test,
+            session_id: "1000",
+          };
+          
+
+        
       
         try {
           const response = await fetch(`${baseURL}/train`, {
@@ -284,30 +299,37 @@ export default function RegressionPage() {
                 </div>
 
                 {result && (
-                    
-                    <div className="mt-6 p-6 rounded-lg text-gray-300 bg-gray-800 ">
-                        <h2 className="text-xl font-bold text-white">Results</h2>
-                        <p>{result.message}</p>
-                        <p>R² Score: {result.metrics.r2_score}</p>
-                        <p>MSE: {result.metrics.mse}</p>
-                        <p>MAE: {result.metrics.mae}</p>
+                    <div className="mt-10 rounded-xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 shadow-xl text-gray-100 w-full max-w-3xl mx-auto">
+                        <h2 className="text-2xl font-bold text-indigo-400 mb-4">Model Results</h2>
+                        
+                        <div className="space-y-2 text-sm md:text-base">
+                        <p><span className="font-semibold text-white">Message:</span> {result.message}</p>
+                        <p><span className="font-semibold text-white">R² Score:</span> {result.metrics.r2_score}</p>
+                        <p><span className="font-semibold text-white">Mean Squared Error (MSE):</span> {result.metrics.mse}</p>
+                        <p><span className="font-semibold text-white">Mean Absolute Error (MAE):</span> {result.metrics.mae}</p>
+                        </div>
 
-                        {result.model_info.coefficients && (
-                        <div>
-                            <h4>Coefficients:</h4>
-                            <ul>
+                        {result.model_info.coefficients && result.model_info.coefficients?.length > 0 && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-semibold text-indigo-300 mb-2">Coefficients</h3>
+                            <ul className="list-disc list-inside space-y-1 pl-2 text-sm md:text-base">
                             {result.model_info.coefficients.map((coef, idx) => (
-                                <li key={idx}>Feature {idx + 1}: {coef}</li>
+                                <li key={idx}>
+                                <span className="font-medium text-white">Feature {idx + 1}:</span> {coef}
+                                </li>
                             ))}
                             </ul>
                         </div>
                         )}
 
                         {result.model_info.intercept !== undefined && (
-                        <p>Intercept: {result.model_info.intercept}</p>
+                        <div className="mt-4 text-sm md:text-base">
+                            <p><span className="font-semibold text-white">Intercept:</span> {result.model_info.intercept}</p>
+                        </div>
                         )}
                     </div>
                     )}
+
 
                 {showFullDataset && (
                     <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center p-6 z-50">

@@ -39,14 +39,53 @@ export default function About() {
         setDataset(null);
         setDatasetFile(null);
     }
+
+    const loadsample = async () => {
+        try {
+          const response = await fetch("/Iris.csv");
+          const csvText = await response.text();
+      
+          // Create a File object from the fetched text
+          const blob = new Blob([csvText], { type: "text/csv" });
+          const sampleFile = new File([blob], "Iris.csv", { type: "text/csv" });
+      
+          // Set the file for any downstream logic expecting File
+          setDatasetFile(sampleFile);
+      
+          // Parse the CSV and set dataset
+          Papa.parse(csvText, {
+            header: false,
+            skipEmptyLines: true,
+            complete: (result: ParseResult<string[]>) => {
+              setDataset(result.data as string[][]);
+            },
+            error: () => {
+              console.error("Error parsing sample dataset:");
+            },
+          });
+        } catch (err) {
+          console.error("Failed to load sample dataset:", err);
+        }
+      };
+      
   return (
     <>
       <Header />
       <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-30">
       {!dataset ? (
+                    <div>
                     <div className="w-full max-w-4xl mx-auto min-h-86 border border-dashed rounded-lg">
                         <FileUpload onChange={handleUpload} />
+                        
                     </div>
+                    <button
+                            className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
+                            onClick={() => loadsample()}
+                        >
+                            Load Sample Dataset
+                        </button>
+                    </div>
+
                 ) : (
                     <div className="mt-6 w-200 p-6 rounded-lg bg-gray-800 ">
                         <h2 className="text-xl font-bold">Dataset Preview</h2>
@@ -81,6 +120,7 @@ export default function About() {
                         >
                             Clear Dataset
                         </button>
+                        
                     </div>
         )}
 

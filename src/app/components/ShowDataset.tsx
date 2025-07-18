@@ -86,7 +86,7 @@ const ShowDataset: React.FC<ShowDatasetProps> = ({ dataset }) => {
                             </table>
                         </div>
                         <button
-                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold"
+                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold cursor-pointer"
                             onClick={() => setShowFullDataset(false)}
                         >
                             Close

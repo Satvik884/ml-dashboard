@@ -14,9 +14,9 @@ import joblib
 import os
 import numpy as np
 
-def save_model(model, session_id):
+def save_model(model, session_id, model_name):
     os.makedirs("models", exist_ok=True)
-    path = f"models/{session_id}.pkl"
+    path = f"models/{session_id}{model_name}.pkl"
     joblib.dump(model, path)
 
 def train_and_evaluate(model_name, X_train_raw, y_train, X_test_raw, y_test, session_id):
@@ -68,7 +68,7 @@ def train_and_evaluate(model_name, X_train_raw, y_train, X_test_raw, y_test, ses
         "r2_score": r2_score(y_test, preds)
     }
 
-    save_model(model, session_id)
+    save_model(model, session_id ,model_name)
 
     model_info = {}
     if hasattr(model, "coef_"):

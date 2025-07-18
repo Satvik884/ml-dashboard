@@ -3,18 +3,16 @@ import Header from "./components/header";
 import { BackgroundGradientAnimation } from "./components/ui/background-gradient-animation";
 import { Upload, Cpu, BarChart3 } from "lucide-react";
 import { FlipWords } from "./components/ui/flip-words";
-import { BackgroundBeamsWithCollision } from "./components/ui/background-beams-with-collision";
 
 export default function Home() {
     const words = ["Intelligence", "Insights", "Predictions", "Decisions"];
     
     return (
         <div className="flex flex-col bg-gradient-to-r from-black to-gray-800">
-            <BackgroundBeamsWithCollision>
             <Header></Header>
-            <div className="flex pl-50 ">
-                <div className="h-[550px] w-[300px] flex flex-col  justify-center">
-                    <h2 className="text-5xl font-bold text-white pt-80 pl-2">Transform Data into </h2>
+            <div className="flex pl-50">
+                <div className="h-full w-[300px] flex flex-col  justify-center">
+                    <h2 className="text-5xl font-bold text-white pt-60 pl-2">Transform Data into </h2>
                     <h2 className="text-5xl font-bold text-white">
                         <span className="inline-block w-[240px]">
                             <FlipWords words={words} />
@@ -23,17 +21,17 @@ export default function Home() {
 
                     <div className="mt-3">
                         <Link href="/about">
-                            <button className="w-40 m-2 bg-gradient-to-r from-purple-400 to-purple-800 text-white-500 px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:scale-105 cursor-pointer">
+                            <button className="w-40 m-2 bg-gradient-to-r from-purple-600 to-purple-900 text-white-500 px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:scale-105 cursor-pointer">
                                 Get Started
                             </button>
                         </Link>                        
                     </div>
                 </div>
-                <div className="h-full w-193 flex items-center justify-center text-center m-20  mt-35 rounded-4xl ">
+                <div className="h-full w-188 flex items-center justify-center text-center ml-20 mr-20 mb-20 rounded-4xl z-10">
                 <BackgroundGradientAnimation>
-                    <div className="absolute z-50 inset-0 flex  text-white font-bold px-4 pointer-events-none text-3xl text-center md:text-4xl lg:text-5xl">
+                    <div className=" flex  text-white font-bold px-4 pointer-events-none text-3xl text-center md:text-4xl lg:text-5xl">
                         <div className="bg-clip-text text-transparent drop-shadow-2xl bg-white">
-                            <p className="pr-30 pl-48 pt-60 text-right">
+                            <p className="pr-30 pl-48 pt-62 text-right">
                             Upload dataset, select model, let AI do the work.
                             </p>
                         </div>
@@ -41,7 +39,6 @@ export default function Home() {
                 </BackgroundGradientAnimation>                 
                 </div>
             </div>
-            </BackgroundBeamsWithCollision>
             <div className="text-center">
 
           
