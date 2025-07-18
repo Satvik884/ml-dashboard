@@ -6,7 +6,7 @@ import { orbitron } from "@/lib/fonts";
 export default function Header() {
     const [active, setActive] = useState<string | null>(null);
     return (
-        <div className="flex w-full text-white items-center">
+        <div className="flex w-full text-white items-center z-100">
             <div className={` pl-50 pr-30 text-3xl font-bold ${orbitron.className}`}>NOCODE</div>
             <div className="flex">
                 <Menu setActive={setActive}>
