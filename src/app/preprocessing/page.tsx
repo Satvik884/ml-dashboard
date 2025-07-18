@@ -44,8 +44,13 @@ export default function PreprocessingPage() {
     const [testPercentage, setTestPercentage] = useState(20);
     const [splitDone, setSplitDone] = useState(false);
 
- 
     useEffect(() => {
+        if (!dataset) {
+          router.push('/about');
+        }
+      }, [dataset,router]);
+    
+      useEffect(() => {
         if (missingValues !== null) {
           console.log('Updated Missing Values:', missingValues);
         }
@@ -293,15 +298,15 @@ export default function PreprocessingPage() {
     return (
         <div className="h-screen bg-gradient-to-r from-black to-gray-1000 text-white">
             <Header></Header>
-            <div className="flex border-t border-t-gray-600 border-t-3">
+            <div className="flex border-t border-t-gray-600 border-t-3 mt-18">
             <aside className="w-72 min-w-72 p-6 flex-shrink-0 h-screen overflow-y-auto border-r border-r-gray-600 border-r-3">
                 <h2 className="text-xl font-bold text-white">Preprocessing Steps</h2>
                 <ul className="mt-4 space-y-4 text-gray-300">
-                    <li className="border border-gray-700 p-3 rounded-lg">Handling Missing Values</li>
-                    <li className="border border-gray-700 p-3 rounded-lg">Feature Scaling</li>
-                    <li className="border border-gray-700 p-3 rounded-lg">Categorical Encoding</li>
-                    <li className="border border-gray-700 p-3 rounded-lg">Feature Selection</li>
-                    <li className="border border-gray-700 p-3 rounded-lg">Data Splitting</li>
+                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#DatasetStatistics">Dataset Statistics</a></li>
+                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Handle missing values">Handle missing values</a></li>
+                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Categorical Encoding">Categorical Encoding</a></li>
+                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Feature Scaling">Feature Scaling</a></li>
+                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Data Splitting">Data Splitting</a></li>
                 </ul>
             </aside>
             <main className="flex-1 p-8 overflow-auto h-screen">
@@ -343,7 +348,7 @@ export default function PreprocessingPage() {
                             </table>
                         </div>
                         <button
-                            className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                            className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                             onClick={() => setShowFullDataset(true)}
                         >
                             Expand Dataset
@@ -355,10 +360,10 @@ export default function PreprocessingPage() {
                 
 
                 
-                    <div className="mt-6 p-6 bg-gray-800 rounded-lg">
+                    <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="DatasetStatistics">
                         <h2 className="text-xl font-bold">Dataset Statistics</h2>
                         <button
-                            className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg"
+                            className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 cursor-pointer"
                             onClick={() => {
                                 processDataset();
                             }}
@@ -415,10 +420,10 @@ export default function PreprocessingPage() {
                 
                 
                 
-                <div className="mt-6 p-6 bg-gray-800 rounded-lg">
+                <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Handle missing values">
                 <h2 className="text-xl font-bold">Handle missing values</h2>
                 <button
-                className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg"
+                className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 cursor-pointer"
                 onClick={() => {
                     fetchMissingValueStats();
                 }}
@@ -457,6 +462,7 @@ export default function PreprocessingPage() {
                             </div>
                         </div>           
                         <div className="mt-4 flex space-x-4">
+                            
                         <button
                             className={`mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg`}
                             onClick={() => {
@@ -473,18 +479,19 @@ export default function PreprocessingPage() {
                 {processedDataset && datasetMissingHandled && <ShowDataset dataset={datasetMissingHandled}  />}
 
                 </div>
-                <div className="mt-6 p-6 bg-gray-800 rounded-lg">
-                <button
-                    className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
-                    onClick={() => handleEncoding()}
-                >
-                    One-hot encoding
-                </button>
+                <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Categorical Encoding">
+                    <h2 className="text-xl font-bold mb-2">Categorical Encoding</h2>                  
+                    <button
+                        className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
+                        onClick={() => handleEncoding()}
+                    >
+                        Proceed with One-hot encoding
+                    </button>
                 {processedDataset2 && datasetEncoded && <ShowDataset dataset={datasetEncoded}  />}
                 
                 </div>
 
-                <div className="mt-6 p-6 bg-gray-800 rounded-lg">
+                <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Feature Scaling">
                     <h2 className="text-xl font-bold mb-2">Feature Scaling</h2>
 
                     <div className="flex flex-col">
@@ -501,7 +508,7 @@ export default function PreprocessingPage() {
                         </div>
                         
                         <button
-                            className="w-fit mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                            className="w-fit mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                             onClick={() => handleScaling()}
                         >
                             Apply Scaling
@@ -516,8 +523,8 @@ export default function PreprocessingPage() {
                     )}
                 </div>
 
-                <div className="mt-6 p-6 bg-gray-800 rounded-lg">
-                    <h2 className="text-xl font-bold mb-2">Train-Test Split</h2>
+                <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Data Splitting">
+                    <h2 className="text-xl font-bold mb-2">Data Splitting</h2>
 
                     <div className="flex flex-col space-y-2">
                         <div>
@@ -543,7 +550,7 @@ export default function PreprocessingPage() {
                         </div>
 
                         <button
-                        className="w-fit mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                        className="w-fit mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                         onClick={handleSplitDataset}
                         >
                         Apply Split
@@ -559,7 +566,7 @@ export default function PreprocessingPage() {
                     </div>
 
                 <button
-                    className="w-fit mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                    className="w-fit mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                     onClick={handleProceedToTraining}
                     >
                     Proceed to Training

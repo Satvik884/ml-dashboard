@@ -160,7 +160,7 @@ export default function RegressionPage() {
     return (
         <div className=" h-screen bg-gradient-to-r from-black to-gray-1000">
             <Header></Header>
-            <div className="flex border-t border-t-gray-600 border-t-3">
+            <div className="flex border-t border-t-gray-600 border-t-3 mt-18">
             <aside className="w-72 min-w-72 p-6 flex-shrink-0 h-screen overflow-y-auto">
                 <h2 className="text-xl font-bold text-white-500">Regression Models</h2>
                 <div className="mt-4 space-y-4">    
@@ -224,13 +224,13 @@ export default function RegressionPage() {
                         </div>
 
                         <button
-                            className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                            className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                             onClick={() => setShowFullDataset(true)}
                         >
                             Expand Dataset
                         </button>
                         <button
-                            className="mt-4 ml-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                            className="mt-4 ml-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                             onClick={() => handleClearDataset()}
                         >
                             Clear Dataset
@@ -252,7 +252,7 @@ export default function RegressionPage() {
                     </p>
 
                     <button
-                        className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                        className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                         onClick={handleProceedToPreprocessing}
                         >
                         Proceed to Data Preprocessing
@@ -260,20 +260,21 @@ export default function RegressionPage() {
                 </div>
 
                 <div className="mt-6 p-6 rounded-lg text-gray-300 bg-gray-800 ">
-                    <h2 className="text-xl font-bold text-white">Training Data</h2>
-                    <p className="mt-2 text-sm leading-relaxed">
-                        Before training a machine learning model, raw data needs to be cleaned and transformed 
-                        into a suitable format. Data preprocessing ensures that your dataset is structured, 
-                        free of inconsistencies, and ready for analysis. Key steps include:
-                    </p>     
+                <h2 className="text-xl font-bold text-white">Training Data</h2>
+                <p className="mt-2 text-sm leading-relaxed text-gray-300">
+                Training data is the foundation of any machine learning model. It consists of input examples — typically rows of structured data — 
+                along with their corresponding labels or target values (in supervised learning). This data is used by the model to learn patterns, 
+                relationships, and behaviors that can later be applied to unseen data.
+                </p>     
 
-                    <p className="mt-4 text-sm">
-                        Skipping data preprocessing can lead to inaccurate predictions, biased models, and poor performance. 
-                        It&apos;s an essential step to ensure high-quality results from machine learning models.
-                    </p>
+                <p className="mt-4 text-sm text-gray-300">
+                The accuracy and effectiveness of any machine learning model depend heavily on the quality and quantity of the training data. 
+                Inadequate or biased training data can lead to unreliable predictions and poor generalization to new inputs.
+                </p>
+
 
                     <button
-                        className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105"
+                        className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
                         onClick={handleTrainModel}
                         >
                         Start Training

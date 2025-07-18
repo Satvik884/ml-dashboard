@@ -1,37 +1,48 @@
 import Link from "next/link";
-import { Upload, Cpu, BarChart3 } from "lucide-react";
 import Header from "./components/header";
 import { BackgroundGradientAnimation } from "./components/ui/background-gradient-animation";
+import { Upload, Cpu, BarChart3 } from "lucide-react";
+import { FlipWords } from "./components/ui/flip-words";
 
 export default function Home() {
+    const words = ["Intelligence", "Insights", "Predictions", "Decisions"];
+    
     return (
         <div className="flex flex-col bg-gradient-to-r from-black to-gray-800">
             <Header></Header>
             <div className="flex pl-50 ">
-                <div className="h-[550px]  flex flex-col  justify-center">
-                    <h2 className="text-5xl font-bold text-white ">Transform Data into Intelligence</h2>
+                <div className="h-[550px] w-[300px] flex flex-col  justify-center">
+                    <h2 className="text-5xl font-bold text-white pt-20 pl-2">Transform Data into </h2>
+                    <h2 className="text-5xl font-bold text-white">
+                        <span className="inline-block w-[240px]">
+                            <FlipWords words={words} />
+                        </span>
+                    </h2>
+
                     <div className="mt-3">
                         <Link href="/regression">
-                            <button className="w-40 bg-gradient-to-r from-purple-400 to-purple-800 text-white-500 px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:scale-105  ">
+                            <button className="w-40 m-2 bg-gradient-to-r from-purple-400 to-purple-800 text-white-500 px-6 py-3 rounded-lg text-lg font-bold shadow-lg hover:scale-105">
                                 Get Started
                             </button>
                         </Link>                        
                     </div>
                 </div>
-                <div className="h-[250px] w-183 flex items-center justify-center text-center m-20  mt-40 rounded-4xl ">
+                <div className="h-[250px] w-188 flex items-center justify-center text-center m-20  mt-40 rounded-4xl ">
                 <BackgroundGradientAnimation>
                     <div className="absolute z-50 inset-0 flex  text-white font-bold px-4 pointer-events-none text-3xl text-center md:text-4xl lg:text-5xl">
                         <div className="bg-clip-text text-transparent drop-shadow-2xl bg-white">
-                            <p className="pr-30 pl-30 pt-45">
-                            Upload your dataset, select an ML model, and let AI do the work.
+                            <p className="pr-30 pl-48 pt-60 text-right">
+                            Upload dataset, select model, let AI do the work.
                             </p>
                         </div>
                     </div>
                 </BackgroundGradientAnimation>                 
                 </div>
             </div>
+            <div className="text-center">
+          
 
-            <div className=" text-white py-20 px-6">
+          <div className=" text-white py-20 px-6">
                 <h2 className="text-center text-4xl font-bold mb-12">Why use NOCODE?</h2>
                 
                 <div className="flex flex-wrap justify-center gap-8">
@@ -60,6 +71,19 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+
+          <div className="mt-6 text-base text-neutral-500 dark:text-neutral-400 leading-relaxed ml-20 mr-20 mb-30">
+            <p>
+              Our platform empowers you to upload your data, choose from
+              state-of-the-art models, and let AI handle the training,
+              evaluation, and deployment.
+            </p>
+            <p className="mt-4">
+              Whether you&apos;re a student, researcher, or business, we make machine
+              learning accessible, fast, and intuitive.
+            </p>
+          </div>
+        </div>
         </div>
     );
 }
