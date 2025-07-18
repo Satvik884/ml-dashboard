@@ -48,10 +48,10 @@ export default function About() {
                         <FileUpload onChange={handleUpload} />
                     </div>
                 ) : (
-                    <div className="mt-6  p-6 rounded-lg bg-gray-800 ">
+                    <div className="mt-6 w-200 p-6 rounded-lg bg-gray-800 ">
                         <h2 className="text-xl font-bold">Dataset Preview</h2>
                         <div className="mt-4 max-h-60 overflow-auto border border-gray-600 rounded-md p-2">
-                            <table className="w-full border-collapse text-sm min-w-max">
+                            <table className="w-200 border-collapse text-sm min-w-max">
                                 
                                 <thead>
                                     <tr className="bg-gray-700 text-white">

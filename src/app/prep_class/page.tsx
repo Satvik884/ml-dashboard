@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useState, useEffect } from "react";
 import { useDataset } from "../context/DatasetContext";
 import axios from "axios";
@@ -7,9 +6,7 @@ import Header from "../components/header";
 import ShowDataset from "../components/ShowDataset";
 import { useRouter } from "next/navigation";
 
-export default function PreprocessingPage() {
-    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const router = useRouter();
+export default function Prep_class() {
     type ColumnStats = {
         [statName: string]: number | string; 
       };
@@ -21,14 +18,13 @@ export default function PreprocessingPage() {
     type MissingValues = {
         [column: string]: number;
     };
-      
-      
+    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const router = useRouter();
     const { dataset, setDataset, datasetFile , setDatasetFile} = useDataset();
     const [columns, setColumns] = useState<string[]>([]);
     const [allColumns,setAllColumns] = useState<string[]>([]);
     const [statistics, setStatistics] = useState<DatasetStatistics | null>(null);
     const [targetVariable, setTargetVariable] = useState<string>("");
-    const [showFullDataset, setShowFullDataset] = useState(false);
     const [missingValues, setMissingValues] = useState<MissingValues | null>(null);
     const [processing, setProcessing] = useState(false);
     const [processedDataset, setProcessedDataset] = useState<boolean>(false);
@@ -49,7 +45,6 @@ export default function PreprocessingPage() {
           router.push('/about');
         }
       }, [dataset,router]);
-    
 
 
     const processDataset = async () => {
@@ -162,7 +157,7 @@ export default function PreprocessingPage() {
         try {
             const formData = new FormData();
             formData.append("file", datasetFile);
-
+            formData.append("targetVariable", targetVariable);
             const response = await axios.post(`${baseURL}/api/encoding/one-hot`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
@@ -195,6 +190,7 @@ export default function PreprocessingPage() {
             const formData = new FormData();
             formData.append("file", datasetFile);
             formData.append("method", scalingMethod); // "standard" or "minmax"
+            formData.append("targetVariable", targetVariable);
     
             const response = await axios.post(`${baseURL}/api/scaling`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
@@ -230,6 +226,7 @@ export default function PreprocessingPage() {
         formData.append("file", datasetFile);
         formData.append("targetVariable", targetVariable);
         formData.append("testPercentage", testPercentage.toString());
+        formData.append("classification", "true");
       
         try {
           const response = await fetch(`${baseURL}/api/split-dataset`, {
@@ -283,78 +280,34 @@ export default function PreprocessingPage() {
             alert("Please upload a dataset first!");
             return;
         }
-        router.push("/regression"); 
+        router.push("/classification"); 
     };
-    
-    
-    
-    
+
+
 
 
     return (
         <div className="h-screen bg-gradient-to-r from-black to-gray-1000 text-white">
             <Header></Header>
             <div className="flex border-t border-t-gray-600 border-t-3 mt-18">
-            <aside className="w-72 min-w-72 p-6 flex-shrink-0 h-screen overflow-y-auto border-r border-r-gray-600 border-r-3">
-                <h2 className="text-xl font-bold text-white">Preprocessing Steps</h2>
-                <ul className="mt-4 space-y-4 text-gray-300">
-                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#DatasetStatistics">Dataset Statistics</a></li>
-                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Handle missing values">Handle missing values</a></li>
-                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Categorical Encoding">Categorical Encoding</a></li>
-                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Feature Scaling">Feature Scaling</a></li>
-                    <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Data Splitting">Data Splitting</a></li>
-                </ul>
-            </aside>
-            <main className="flex-1 p-8 overflow-auto h-screen">
-                <h1 className="text-3xl font-bold">Data Preprocessing</h1>
+                <aside className="w-72 min-w-72 p-6 flex-shrink-0 h-screen overflow-y-auto border-r border-r-gray-600 border-r-3">
+                    <h2 className="text-xl font-bold text-white">Preprocessing Steps</h2>
+                    <ul className="mt-4 space-y-4 text-gray-300">
+                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#DatasetStatistics">Dataset Statistics</a></li>
+                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Handle missing values">Handle missing values</a></li>
+                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Categorical Encoding">Categorical Encoding</a></li>
+                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Feature Scaling">Feature Scaling</a></li>
+                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Label Encoding">Label Encoding</a></li>
+                        <li className="border border-gray-700 p-3 rounded-lg"><a  href="#Data Splitting">Data Splitting</a></li>
+                    </ul>
+                </aside>
+                <main className="flex-1 p-8 overflow-auto h-screen">
+                    <h1 className="text-3xl font-bold">Data Preprocessing</h1>
 
-                <div className="mt-6  p-6 rounded-lg bg-gray-800 ">
-                        <h2 className="text-xl font-bold">Dataset Preview</h2>
-                        <div className="mt-4 max-h-60 overflow-auto border border-gray-600 rounded-md p-2">
-                            <table className="w-full border-collapse text-sm min-w-max">
-                            <thead>
-                                {dataset && dataset.length > 0 && dataset[0] ? (
-                                    <tr className="bg-gray-700 text-white">
-                                        {dataset[0].map((col: string, idx: number) => (
-                                            <th key={idx} className="p-2 border">{col}</th>
-                                        ))}
-                                    </tr>
-                                ) : (
-                                    <tr>
-                                        <th className="p-2 border">No data available</th>
-                                    </tr>
-                                )}
-                            </thead>
-                            <tbody>
-                                {dataset && dataset.length > 1 ? (
-                                    dataset.slice(1).map((row: string[], idx: number) => (
-                                        <tr key={idx} className="border-t border-gray-600">
-                                            {row.map((cell: string, i: number) => (
-                                                <td key={i} className="p-2 border">{cell}</td>
-                                            ))}
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        
-                                    </tr>
-                                )}
-                            </tbody>
-
-                            </table>
-                        </div>
-                        <button
-                            className="mt-4 bg-gradient-to-r from-black to-gray-800 text-white border border-white px-4 py-2 rounded-lg font-bold transition-transform duration-300 hover:scale-105 cursor-pointer"
-                            onClick={() => setShowFullDataset(true)}
-                        >
-                            Expand Dataset
-                        </button>
+                    <div className="mt-6  p-6 rounded-lg bg-gray-800 ">
+                            <h2 className="text-xl font-bold">Dataset Preview</h2>
+                            {dataset && <ShowDataset dataset={dataset}  />}
                     </div>
-                    
-
-                
-                
-
                 
                     <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="DatasetStatistics">
                         <h2 className="text-xl font-bold">Dataset Statistics</h2>
@@ -395,86 +348,99 @@ export default function PreprocessingPage() {
                         
                         )}
                     </div>
-
-                
-                
-                <div className="mt-6 p-6 bg-gray-800 rounded-lg">
-                    <h2 className="text-xl font-bold">Select Target Variable</h2>
-                    <select
-                        className="mt-2 p-2 rounded-lg bg-gray-700 text-white"
-                        value={targetVariable}
-                        onChange={(e) => setTargetVariable(e.target.value)}
-                    >
-                        <option value="">Select Target Variable</option>
-                        {allColumns.map((col, idx) => (
-                            <option key={idx} value={col}>
-                                {col}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                
-                
-                
-                <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Handle missing values">
-                <h2 className="text-xl font-bold">Handle missing values</h2>
-                <button
-                className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 cursor-pointer"
-                onClick={() => {
-                    fetchMissingValueStats();
-                }}
-                >
-                Check for missing values
-                </button>
-                
-                
-                {missingValues && Object.values(missingValues).every(count => count === 0) ? (
-                    <p className="mt-6 text-green-400 text-lg font-semibold">
-                        No missing values detected in the dataset.
-                    </p>
-                ) : (
-                    missingValues && Object.keys(missingValues).length > 0 && (
-                        <>
-                        <div className="mt-6 bg-gray-800 rounded-lg">
-                            <h3 className="font-bold">Missing Value Statistics</h3>
-                            <div className="w-half mt-4 max-h-80 overflow-auto border border-gray-600 rounded-md p-2">
-                                <table className="w-full border-collapse text-sm text-white">
-                                    <thead>
-                                        <tr className="bg-gray-700">
-                                            <th className="p-2 border">Column</th>
-                                            <th className="p-2 border">Missing Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {Object.entries(missingValues as Record<string, number>).map(([col, count], idx: number) => (
-                                        <tr key={idx} className="border-t border-gray-600">
-                                            <td className="p-2 border">{col}</td>
-                                            <td className="p-2 border">{count}</td>
-                                        </tr>
-                                    ))}
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>           
-                        <div className="mt-4 flex space-x-4">
-                            
-                        <button
-                            className={`mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg`}
-                            onClick={() => {
-                                handleMissingValues();
-                            }}
-                            disabled={processing}
+                    <div className="mt-6 p-6 bg-gray-800 rounded-lg">
+                        <h2 className="text-xl font-bold">Select Target Variable</h2>
+                        <select
+                            className="mt-2 p-2 rounded-lg bg-gray-700 text-white"
+                            value={targetVariable}
+                            onChange={(e) => setTargetVariable(e.target.value)}
                         >
-                            Handle Missing Values
-                        </button>
-                        </div>
-                        </>
-                ))}
+                            <option value="">Select Target Variable</option>
+                            {allColumns.map((col, idx) => (
+                                <option key={idx} value={col}>
+                                    {col}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                {processedDataset && datasetMissingHandled && <ShowDataset dataset={datasetMissingHandled}  />}
+                <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Handle missing values">
+                    <h2 className="text-xl font-bold">Handle missing values</h2>
+                    <button
+                    className="mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 cursor-pointer"
+                    onClick={() => {
+                        fetchMissingValueStats();
+                    }}
+                    >
+                    Check for missing values
+                    </button>
+                    
+                    
+                    {missingValues && Object.values(missingValues).every(count => count === 0) ? (
+                        <p className="mt-6 text-green-400 text-lg font-semibold">
+                            No missing values detected in the dataset.
+                        </p>
+                    ) : (
+                        missingValues && Object.keys(missingValues).length > 0 && (
+                            <>
+                            <div className="mt-6 bg-gray-800 rounded-lg">
+                                <h3 className="font-bold">Missing Value Statistics</h3>
+                                <div className="w-half mt-4 max-h-80 overflow-auto border border-gray-600 rounded-md p-2">
+                                    <table className="w-full border-collapse text-sm text-white">
+                                        <thead>
+                                            <tr className="bg-gray-700">
+                                                <th className="p-2 border">Column</th>
+                                                <th className="p-2 border">Missing Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {Object.entries(missingValues as Record<string, number>).map(([col, count], idx: number) => (
+                                            <tr key={idx} className="border-t border-gray-600">
+                                                <td className="p-2 border">{col}</td>
+                                                <td className="p-2 border">{count}</td>
+                                            </tr>
+                                        ))}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>           
+                            <div className="mt-4 flex space-x-4">
+                                
+                            <button
+                                className={`mt-4 bg-gradient-to-r from-black to-gray-800  border border-white text-white px-4 py-2 rounded-lg`}
+                                onClick={() => {
+                                    handleMissingValues();
+                                }}
+                                disabled={processing}
+                            >
+                                Handle Missing Values
+                            </button>
+                            </div>
+                            </>
+                    ))}
+
+                    {processedDataset && datasetMissingHandled && <ShowDataset dataset={datasetMissingHandled}  />}
 
                 </div>
+                {showChanges && (
+                    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-6 z-50">
+                        <div className="bg-gray-800 p-6 rounded-lg max-w-lg w-full">
+                            <h2 className="text-2xl font-bold text-white mb-4">Changes Made</h2>
+                            <ul className="list-disc pl-6 text-gray-300">
+                                {changeLogs.map((log, idx) => (
+                                    <li key={idx}>{log}</li>
+                                ))}
+                            </ul>
+                            <button
+                                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold"
+                                onClick={() => setShowChanges(false)}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Categorical Encoding">
                     <h2 className="text-xl font-bold mb-2">Categorical Encoding</h2>                  
                     <button
@@ -483,10 +449,9 @@ export default function PreprocessingPage() {
                     >
                         Proceed with One-hot encoding
                     </button>
-                {processedDataset2 && datasetEncoded && <ShowDataset dataset={datasetEncoded}  />}
+                    {processedDataset2 && datasetEncoded && <ShowDataset dataset={datasetEncoded}  />}
                 
                 </div>
-
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Feature Scaling">
                     <h2 className="text-xl font-bold mb-2">Feature Scaling</h2>
 
@@ -518,7 +483,6 @@ export default function PreprocessingPage() {
                         </div>
                     )}
                 </div>
-
                 <div className="mt-6 p-6 bg-gray-800 rounded-lg" id="Data Splitting">
                     <h2 className="text-xl font-bold mb-2">Data Splitting</h2>
 
@@ -568,61 +532,9 @@ export default function PreprocessingPage() {
                     Proceed to Training
                 </button>
 
+                </main>
 
-                {showChanges && (
-                    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-6 z-50">
-                        <div className="bg-gray-800 p-6 rounded-lg max-w-lg w-full">
-                            <h2 className="text-2xl font-bold text-white mb-4">Changes Made</h2>
-                            <ul className="list-disc pl-6 text-gray-300">
-                                {changeLogs.map((log, idx) => (
-                                    <li key={idx}>{log}</li>
-                                ))}
-                            </ul>
-                            <button
-                                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold"
-                                onClick={() => setShowChanges(false)}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                {showFullDataset && (
-                    <div className="fixed inset-0 bg-black bg-opacity-90 flex flex-col items-center justify-center p-6 z-50">
-                        <h2 className="text-2xl font-bold text-white mb-4">Full Dataset</h2>
-                        
-                        {/* Scrollable Dataset Table */}
-                        <div className="overflow-auto max-h-[80vh] w-11/12 bg-gray-800 p-4 rounded-lg border border-gray-700">
-                            <table className="w-full border-collapse text-sm text-white">
-                                <thead>
-                                    <tr className="bg-gray-700">
-                                        {dataset && dataset[0].map((col:string, idx:number) => (
-                                            <th key={idx} className="p-2 border">{col}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dataset && dataset.map((row:string[], idx:number) => (
-                                        <tr key={idx} className="border-t border-gray-600">
-                                            {row.map((cell:string, i:number) => (
-                                                <td key={i} className="p-2 border">{cell}</td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <button
-                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg font-bold"
-                            onClick={() => setShowFullDataset(false)}
-                        >
-                            Close
-                        </button>
-                    </div>
-                )}
-            </main>
             </div>
         </div>
-    );
+    )
 }

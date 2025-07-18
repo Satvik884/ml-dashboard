@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 
-def split_dataset_file(csv_path: str, target_column: str, test_percentage: float = 20.0):
+def split_dataset_file(csv_path: str, target_column: str, test_percentage: float = 20.0, is_classification: bool = False):
     df = pd.read_csv(csv_path)
 
     if target_column not in df.columns:
@@ -14,10 +14,14 @@ def split_dataset_file(csv_path: str, target_column: str, test_percentage: float
     X = df.drop(columns=[target_column])
     y = df[target_column]
 
-
     test_size = test_percentage / 100.0
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
+    # Use stratify only if classification
+    stratify = y if is_classification else None
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=42, stratify=stratify
+    )
 
     return {
         "X_train": X_train.to_dict(orient="records"),
@@ -25,3 +29,4 @@ def split_dataset_file(csv_path: str, target_column: str, test_percentage: float
         "y_train": y_train.tolist(),
         "y_test": y_test.tolist()
     }
+

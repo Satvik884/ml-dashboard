@@ -12,7 +12,6 @@ export default function Header() {
                 <Menu setActive={setActive}>
                 <HoveredLink href="/">Home</HoveredLink>
                 <HoveredLink href="/about">Upload</HoveredLink>
-                <HoveredLink href="/about">Upload</HoveredLink>
                 <MenuItem setActive={setActive} active={active} item="Regression">
                     <div className="flex flex-col space-y-4 text-sm">
                     <HoveredLink href="/web-dev">Web Development</HoveredLink>
